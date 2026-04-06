@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TermBuddy — Buddy Your Terminal</title>
+    <meta name="description" content="TermBuddy transforms remote server management into a friendly chat conversation. Available on iPhone and Mac.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #4A7BF7;
+            --primary-dark: #3560D4;
+            --bg-light: #F7F9FC;
+            --bg-white: #FFFFFF;
+            --text-dark: #1A1A2E;
+            --text-muted: #6B7280;
+            --accent-pink: #F472B6;
+            --accent-green: #34D399;
+            --radius: 16px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-dark);
+            background: var(--bg-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .nav-logo img { width: 36px; height: 36px; border-radius: 8px; }
+
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .nav-cta {
+            background: var(--primary);
+            color: #fff !important;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .nav-cta:hover { background: var(--primary-dark); }
+
+        /* Hero */
+        .hero {
+            padding: 140px 24px 80px;
+            text-align: center;
+            background: linear-gradient(180deg, #EEF2FF 0%, #FFFFFF 100%);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span { color: var(--primary); }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: #fff;
+            padding: 14px 32px;
+            border-radius: 28px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 14px rgba(74,123,247,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74,123,247,0.4);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            padding: 14px 32px;
+            border-radius: 28px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid #E5E7EB;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .hero-mascot {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .hero-mascot img {
+            width: 240px;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .hero-mascot img:hover { transform: translateY(-8px); }
+
+        /* Section common */
+        section { padding: 100px 24px; }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .section-title p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features { background: var(--bg-light); }
+
+        .features-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 36px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* Showcase */
+        .showcase {
+            background: var(--bg-white);
+        }
+
+        .showcase-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .showcase-item {
+            text-align: center;
+        }
+
+        .showcase-item img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: var(--radius);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        .showcase-item img:hover { transform: scale(1.03); }
+
+        .showcase-item h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+        .showcase-item p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* How It Works */
+        .how-it-works { background: var(--bg-light); }
+
+        .steps {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            padding: 32px 0;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 27px;
+            top: 72px;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), #E5E7EB);
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            min-width: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 800;
+            z-index: 1;
+        }
+
+        .step-content h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+        .step-content p { color: var(--text-muted); }
+
+        /* Security */
+        .security {
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+            color: #fff;
+            text-align: center;
+        }
+
+        .security .section-title h2 { color: #fff; }
+        .security .section-title p { color: rgba(255,255,255,0.7); }
+
+        .security-grid {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+        }
+
+        .security-item {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius);
+            padding: 32px;
+        }
+
+        .security-item .icon { font-size: 2rem; margin-bottom: 16px; }
+        .security-item h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+        .security-item p { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+
+        /* AI Section */
+        .ai-section { background: var(--bg-white); }
+
+        .ai-providers {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .ai-provider {
+            text-align: center;
+            padding: 32px 40px;
+            background: var(--bg-light);
+            border-radius: var(--radius);
+            min-width: 200px;
+            transition: transform 0.3s;
+        }
+
+        .ai-provider:hover { transform: translateY(-4px); }
+
+        .ai-provider .icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .ai-provider h3 { font-size: 1.1rem; font-weight: 700; }
+        .ai-provider p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+
+        /* CTA */
+        .cta {
+            text-align: center;
+            background: linear-gradient(180deg, #FFFFFF 0%, #EEF2FF 100%);
+            padding: 100px 24px;
+        }
+
+        .cta-mascot { width: 140px; margin-bottom: 30px; }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 36px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: rgba(255,255,255,0.6);
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
+        footer a:hover { color: #fff; }
+
+        .footer-links { display: flex; justify-content: center; gap: 32px; margin-bottom: 20px; flex-wrap: wrap; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-mascot img { width: 180px; }
+            .hero-mascot { gap: 16px; }
+            section { padding: 70px 20px; }
+            .ai-providers { gap: 20px; }
+            .ai-provider { min-width: 150px; padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="nav-logo">
+            <img src="images/logo.png" alt="TermBuddy">
+            TermBuddy
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#ai">AI Assistants</a></li>
+            <li><a href="https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues" class="nav-cta">Feedback</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <h1>Your Terminal Just Became<br><span>Your Best Mate</span></h1>
+    <p>Manage remote servers from your iPhone or Mac — chat with your terminal like messaging a friend. Powered by AI.</p>
+    <div class="hero-buttons">
+        <a href="#" class="btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Download for iOS
+        </a>
+        <a href="#" class="btn-secondary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Download for Mac
+        </a>
+    </div>
+    <div class="hero-mascot">
+        <img src="images/hero.png" alt="Welcome to TermBuddy">
+        <img src="images/feature_tasks.png" alt="Manage your tasks">
+        <img src="images/feature_chat.png" alt="Chat with your terminal">
+    </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+    <div class="section-title">
+        <h2>Everything You Need, Nothing You Don't</h2>
+        <p>TermBuddy is packed with features that make server management a breeze.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon" style="background: #EEF2FF; color: var(--primary);">💬</div>
+            <h3>Chat-Style Interface</h3>
+            <p>Send commands as messages, get responses as chat bubbles. Managing servers feels as natural as texting a friend.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: #FDF2F8; color: var(--accent-pink);">🤖</div>
+            <h3>Built-In AI Assistants</h3>
+            <p>Claude Code, Codex, and Gemini CLI built right in. Ask AI to write scripts, debug errors, or explain your server.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: #ECFDF5; color: var(--accent-green);">🔒</div>
+            <h3>Fully Encrypted</h3>
+            <p>SSH tunnel or TLS with certificate pinning. Direct connection to your server — no third-party cloud, no middleman.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: #FEF3C7; color: #F59E0B;">⚡</div>
+            <h3>Real-Time Streaming</h3>
+            <p>Live output via Server-Sent Events. Watch your commands execute in real time with zero delay.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: #F3E8FF; color: #8B5CF6;">🔔</div>
+            <h3>Push Notifications</h3>
+            <p>Get notified when long-running commands finish. No need to keep the app open — your Buddy will ping you.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: #E0F2FE; color: #0284C7;">📁</div>
+            <h3>File Browser</h3>
+            <p>Browse, upload, and download files on your server. Quick access without switching to a separate SFTP client.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Showcase -->
+<section class="showcase">
+    <div class="section-title">
+        <h2>See It In Action</h2>
+        <p>A few glimpses of what TermBuddy looks like on your device.</p>
+    </div>
+    <div class="showcase-grid">
+        <div class="showcase-item">
+            <img src="images/feature_setup.png" alt="Easy Setup">
+            <h3>Set Up in Seconds</h3>
+            <p>Connect, set your directory, and your Buddy is ready to go.</p>
+        </div>
+        <div class="showcase-item">
+            <img src="images/feature_security.png" alt="Security">
+            <h3>Direct & Encrypted</h3>
+            <p>Your phone connects directly to your server. No cloud in between.</p>
+        </div>
+        <div class="showcase-item">
+            <img src="images/feature_platform.png" alt="Cross Platform">
+            <h3>iPhone & Mac</h3>
+            <p>One subscription, available everywhere you need it.</p>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works" id="how-it-works">
+    <div class="section-title">
+        <h2>Up and Running in Four Steps</h2>
+        <p>No complicated setup. No manual configuration. Just tap and go.</p>
+    </div>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>Add Your Server</h3>
+                <p>Enter your server's IP address and SSH credentials. That's all TermBuddy needs to get started.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>Automatic Installation</h3>
+                <p>TermBuddy installs its lightweight Go server on your machine automatically. No SSH-ing in to set things up.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>Create Your Buddies</h3>
+                <p>Each Buddy is a persistent terminal session. Create one for monitoring, another for deployments, another for logs.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h3>Chat Away</h3>
+                <p>Send commands, get results, ask AI for help — all in a friendly chat interface. From the sofa, the cafe, or the train.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Security -->
+<section class="security" id="security">
+    <div class="section-title">
+        <h2>Security Without Compromise</h2>
+        <p>Your data stays yours. Always.</p>
+    </div>
+    <div class="security-grid">
+        <div class="security-item">
+            <div class="icon">🔐</div>
+            <h3>No Intermediate Servers</h3>
+            <p>Direct connection from your device to your server. Your data never passes through anyone else's infrastructure.</p>
+        </div>
+        <div class="security-item">
+            <div class="icon">🛡️</div>
+            <h3>SSH + TLS Encryption</h3>
+            <p>SSH Tunnel mode encrypts through SSH. Direct mode uses TLS with certificate pinning. Double the protection.</p>
+        </div>
+        <div class="security-item">
+            <div class="icon">🔑</div>
+            <h3>Keychain Storage</h3>
+            <p>All credentials stored in the system Keychain. Token-based API authentication with automatic rate limiting.</p>
+        </div>
+    </div>
+</section>
+
+<!-- AI Section -->
+<section class="ai-section" id="ai">
+    <div class="section-title">
+        <h2>AI Assistants, Built Right In</h2>
+        <p>Like having a senior engineer in your pocket. Choose your favourite.</p>
+    </div>
+    <div class="ai-providers">
+        <div class="ai-provider">
+            <div class="icon">🟠</div>
+            <h3>Claude Code</h3>
+            <p>By Anthropic</p>
+        </div>
+        <div class="ai-provider">
+            <div class="icon">🟢</div>
+            <h3>Codex</h3>
+            <p>By OpenAI</p>
+        </div>
+        <div class="ai-provider">
+            <div class="icon">🔵</div>
+            <h3>Gemini CLI</h3>
+            <p>By Google</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <img src="images/thumb_up.png" alt="TermBuddy" class="cta-mascot">
+    <h2>Stop Wrestling With Terminals.<br>Start Chatting With Them.</h2>
+    <p>Download TermBuddy and give your servers the buddy they deserve.</p>
+    <div class="hero-buttons">
+        <a href="#" class="btn-primary">
+            Download for iOS
+        </a>
+        <a href="#" class="btn-secondary">
+            Download for Mac
+        </a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-links">
+        <a href="https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues">Feedback</a>
+        <a href="https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues/new?labels=bug">Report a Bug</a>
+        <a href="https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues/new?labels=enhancement">Request a Feature</a>
+        <a href="privacy.html">Privacy Policy</a>
+    </div>
+    <p>&copy; 2026 ATLAI Technology Ltd. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
