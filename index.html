@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TermBuddy — Buddy Your Terminal</title>
+    <title>TermBuddy - Buddy Your Terminal</title>
     <meta name="description" content="TermBuddy transforms remote server management into a friendly chat conversation. Available on iPhone and Mac.">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; }
 
         :root {
             --primary: #4A7BF7;
@@ -341,33 +341,6 @@
         .security-item h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
         .security-item p { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
 
-        /* AI Section */
-        .ai-section { background: var(--bg-white); }
-
-        .ai-providers {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            gap: 48px;
-            flex-wrap: wrap;
-        }
-
-        .ai-provider {
-            text-align: center;
-            padding: 32px 40px;
-            background: var(--bg-light);
-            border-radius: var(--radius);
-            min-width: 200px;
-            transition: transform 0.3s;
-        }
-
-        .ai-provider:hover { transform: translateY(-4px); }
-
-        .ai-provider .icon { font-size: 2.5rem; margin-bottom: 12px; }
-        .ai-provider h3 { font-size: 1.1rem; font-weight: 700; }
-        .ai-provider p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
-
         /* CTA */
         .cta {
             text-align: center;
@@ -402,14 +375,138 @@
 
         .footer-links { display: flex; justify-content: center; gap: 32px; margin-bottom: 20px; flex-wrap: wrap; }
 
+        /* Support */
+        .support {
+            background: linear-gradient(180deg, #EEF2FF 0%, #FFFFFF 100%);
+            text-align: center;
+        }
+
+        .support-mascot {
+            width: 120px;
+            margin-bottom: 24px;
+        }
+
+        .support-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .support-cards {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin-top: 48px;
+            align-items: stretch;
+        }
+
+        .support-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 40px 32px;
+            box-shadow: 0 4px 20px rgba(74,123,247,0.08);
+            border: 1px solid rgba(74,123,247,0.08);
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .support-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(74,123,247,0.15);
+        }
+
+        .support-card .icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .support-card:nth-child(1) .icon { background: #EEF2FF; }
+        .support-card:nth-child(2) .icon { background: #FEF3C7; }
+        .support-card:nth-child(3) .icon { background: #F3E8FF; }
+
+        .support-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        .support-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px; flex: 1; }
+
+        .support-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 24px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(74,123,247,0.2);
+        }
+
+        .support-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(74,123,247,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .support-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            .support-card {
+                max-width: 400px;
+                width: 100%;
+            }
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(74,123,247,0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background 0.2s;
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .hero-mascot img { width: 180px; }
             .hero-mascot { gap: 16px; }
             section { padding: 70px 20px; }
-            .ai-providers { gap: 20px; }
-            .ai-provider { min-width: 150px; padding: 24px; }
+            .back-to-top { bottom: 20px; right: 20px; width: 42px; height: 42px; }
         }
     </style>
 </head>
@@ -419,23 +516,22 @@
 <nav>
     <div class="nav-inner">
         <a href="#" class="nav-logo">
-            <img src="images/logo.png" alt="TermBuddy">
+            <img src="images/logo_dark_bgbwhite.png" alt="TermBuddy">
             TermBuddy
         </a>
         <ul class="nav-links">
+            <li><a href="#">Home</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#security">Security</a></li>
-            <li><a href="#ai">AI Assistants</a></li>
-            <li><a href="https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues" class="nav-cta">Feedback</a></li>
+            <li><a href="#support">Support</a></li>
         </ul>
     </div>
 </nav>
 
 <!-- Hero -->
 <section class="hero">
-    <h1>Your Terminal Just Became<br><span>Your Best Mate</span></h1>
-    <p>Manage remote servers from your iPhone or Mac — chat with your terminal like messaging a friend. Powered by AI.</p>
+    <h1>Your Terminal Just Became<br><span>Your Best Buddy</span></h1>
+    <p>Manage remote servers from your iPhone or Mac. Chat with your terminal like messaging a friend. Powered by AI.</p>
     <div class="hero-buttons">
         <a href="#" class="btn-primary">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
@@ -467,13 +563,13 @@
         </div>
         <div class="feature-card">
             <div class="feature-icon" style="background: #FDF2F8; color: var(--accent-pink);">🤖</div>
-            <h3>Built-In AI Assistants</h3>
+            <h3>Support SOTA AI</h3>
             <p>Claude Code, Codex, and Gemini CLI built right in. Ask AI to write scripts, debug errors, or explain your server.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon" style="background: #ECFDF5; color: var(--accent-green);">🔒</div>
             <h3>Fully Encrypted</h3>
-            <p>SSH tunnel or TLS with certificate pinning. Direct connection to your server — no third-party cloud, no middleman.</p>
+            <p>SSH tunnel or TLS with certificate pinning. Direct connection to your server. No third-party cloud, no middleman.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon" style="background: #FEF3C7; color: #F59E0B;">⚡</div>
@@ -483,7 +579,7 @@
         <div class="feature-card">
             <div class="feature-icon" style="background: #F3E8FF; color: #8B5CF6;">🔔</div>
             <h3>Push Notifications</h3>
-            <p>Get notified when long-running commands finish. No need to keep the app open — your Buddy will ping you.</p>
+            <p>Get notified when long-running commands finish. No need to keep the app open. Your Buddy will ping you.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon" style="background: #E0F2FE; color: #0284C7;">📁</div>
@@ -550,7 +646,7 @@
             <div class="step-number">4</div>
             <div class="step-content">
                 <h3>Chat Away</h3>
-                <p>Send commands, get results, ask AI for help — all in a friendly chat interface. From the sofa, the cafe, or the train.</p>
+                <p>Send commands, get results, ask AI for help. All in a friendly chat interface. From the sofa, the cafe, or the train.</p>
             </div>
         </div>
     </div>
@@ -581,34 +677,40 @@
     </div>
 </section>
 
-<!-- AI Section -->
-<section class="ai-section" id="ai">
+<!-- Support -->
+<section class="support" id="support">
+    <img src="images/thumb_up.png" alt="TermBuddy Support" class="support-mascot">
     <div class="section-title">
-        <h2>AI Assistants, Built Right In</h2>
-        <p>Like having a senior engineer in your pocket. Choose your favourite.</p>
+        <h2>Support & Contact</h2>
+        <p>Need help? Your Buddy's got your back. Reach out anytime.</p>
     </div>
-    <div class="ai-providers">
-        <div class="ai-provider">
-            <div class="icon">🟠</div>
-            <h3>Claude Code</h3>
-            <p>By Anthropic</p>
-        </div>
-        <div class="ai-provider">
-            <div class="icon">🟢</div>
-            <h3>Codex</h3>
-            <p>By OpenAI</p>
-        </div>
-        <div class="ai-provider">
-            <div class="icon">🔵</div>
-            <h3>Gemini CLI</h3>
-            <p>By Google</p>
+    <div class="support-content">
+        <div class="support-cards">
+            <div class="support-card">
+                <div class="icon">📧</div>
+                <h3>Email Us</h3>
+                <p>For general questions, account issues, or any support needs, drop us an email and we'll get back to you.</p>
+                <a href="mailto:atlai@atlai.co.uk" class="support-btn">atlai@atlai.co.uk</a>
+            </div>
+            <div class="support-card">
+                <div class="icon">🐛</div>
+                <h3>Report a Bug</h3>
+                <p>Found something that doesn't work right? Let us know and we'll fix it as quickly as possible.</p>
+                <a href="https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues/new?labels=bug&template=bug_report.md" class="support-btn">Report Bug</a>
+            </div>
+            <div class="support-card">
+                <div class="icon">💡</div>
+                <h3>Request a Feature</h3>
+                <p>Have an idea that would make TermBuddy even better? We'd love to hear your suggestions.</p>
+                <a href="https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues/new?labels=enhancement&template=feature_request.md" class="support-btn">Request Feature</a>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- CTA -->
 <section class="cta">
-    <img src="images/thumb_up.png" alt="TermBuddy" class="cta-mascot">
+    <img src="images/logo_dark_bgbwhite.png" alt="TermBuddy" class="cta-mascot">
     <h2>Stop Wrestling With Terminals.<br>Start Chatting With Them.</h2>
     <p>Download TermBuddy and give your servers the buddy they deserve.</p>
     <div class="hero-buttons">
@@ -624,6 +726,8 @@
 <!-- Footer -->
 <footer>
     <div class="footer-links">
+        <a href="#support">Support</a>
+        <a href="mailto:atlai@atlai.co.uk">Contact Us</a>
         <a href="https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues">Feedback</a>
         <a href="https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues/new?labels=bug">Report a Bug</a>
         <a href="https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues/new?labels=enhancement">Request a Feature</a>
@@ -631,6 +735,19 @@
     </div>
     <p>&copy; 2026 ATLAI Technology Ltd. All rights reserved.</p>
 </footer>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+<script>
+(function(){
+    var btn = document.getElementById('backToTop');
+    window.addEventListener('scroll', function(){
+        if(window.scrollY > 400) btn.classList.add('visible');
+        else btn.classList.remove('visible');
+    });
+})();
+</script>
 
 </body>
 </html>
