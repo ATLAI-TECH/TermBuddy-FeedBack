@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/logo.png" alt="TermBuddy Logo" width="200">
+  <img src="images/logo_dark_bgbwhite.png" alt="TermBuddy Logo" width="200">
 </p>
 
 <h1 align="center">TermBuddy</h1>
@@ -12,8 +12,8 @@
 </p>
 
 <p align="center">
-  <b>Your terminal just became your best mate.</b><br>
-  Manage remote servers from your iPhone or Mac — chat with your terminal like messaging a friend.
+  <b>Your terminal just became your best buddy.</b><br>
+  Manage remote servers from your iPhone or Mac. Chat with your terminal like messaging a friend.
 </p>
 
 ---
@@ -28,28 +28,35 @@
 
 ---
 
-## Why TermBuddy?
+## What is TermBuddy?
 
-Tired of clunky SSH apps and tiny terminal fonts on your phone? **TermBuddy reimagines the terminal as a chat conversation.** Send commands as messages, get responses as chat bubbles. Whether you're restarting a service, tailing logs, or deploying code — it feels as natural as texting.
+TermBuddy is a native macOS and iOS app that transforms how you interact with remote servers. Instead of staring at a cold, stateless terminal window, each server session becomes a "Buddy", a persistent, chat-style conversation where:
+
+- Commands are sent as chat messages
+- Output appears as reply bubbles
+- History is preserved across restarts
+- AI assistants can work right alongside you in the same interface
+
+Whether you're a developer managing production servers, a DevOps engineer wrangling multiple environments, or a hobbyist maintaining a home lab, TermBuddy makes server management feel natural and efficient.
 
 ## Key Features
 
-### AI-Powered Terminal
-Built-in support for **Claude Code**, **Codex**, and **Gemini CLI**. Ask your AI assistant to write scripts, debug errors, or explain what's happening on your server — all within the same chat interface. It's like having a senior engineer in your pocket.
+### Support SOTA AI
+Built-in support for **Claude Code**, **Codex**, and **Gemini CLI**. Ask your AI assistant to write scripts, debug errors, or explain what's happening on your server, all within the same chat interface.
 
 <p align="center">
   <img src="images/feature_platform.png" alt="Available Everywhere" width="300">
 </p>
 
 ### Direct Connection. No Middleman. Fully Encrypted.
-TermBuddy connects your device directly to your server — no intermediate relay, no third-party cloud. In SSH Tunnel mode, all traffic is encrypted through SSH. In Direct Connection mode, traffic is protected by TLS with certificate pinning. Your data never passes through anyone else's servers.
+TermBuddy connects your device directly to your server. No intermediate relay, no third-party cloud. In SSH Tunnel mode, all traffic is encrypted through SSH. In Direct Connection mode, traffic is protected by TLS with certificate pinning. Your data never passes through anyone else's servers.
 
 <p align="center">
   <img src="images/feature_security.png" alt="Secure and Reliable" width="300">
 </p>
 
 ### Set Up in Seconds, Not Hours
-Point TermBuddy at your server, enter your SSH credentials, and tap Go. The app installs everything automatically — no manual configuration required.
+Point TermBuddy at your server, enter your SSH credentials, and tap Go. The app installs everything automatically. No manual configuration required.
 
 <p align="center">
   <img src="images/feature_setup.png" alt="Easy Setup" width="300">
@@ -68,55 +75,109 @@ Point TermBuddy at your server, enter your SSH credentials, and tap Go. The app 
 
 ---
 
+## Getting Started
+
+### Requirements
+
+**Client (your device):**
+- iPhone: iOS 17.0 or later
+- Mac: macOS 14.0 (Sonoma) or later
+
+**Server (your remote machine):**
+- Linux: Ubuntu 18.04+, Debian 9+, CentOS 7+, or any modern distro
+- macOS: 12.0 (Monterey) or later
+- SSH access enabled (port 22, or a custom port)
+- For AI Buddies: Node.js 18+ (to install Claude Code CLI)
+
+### Adding Your First Server
+
+1. Open TermBuddy and tap the **Servers** tab
+2. Tap the **+** (Add Server) button
+3. Enter your server's IP address or hostname
+4. Enter your SSH username and password, or select an SSH key file
+5. Tap **Connect**
+
+TermBuddy will automatically detect, download, install, and start its lightweight server component. No manual steps required.
+
+> **Tip:** Credentials are stored securely in the system Keychain, never in plain text.
+
+> **Recommended:** For servers not on your local network, use Tailscale or another VPN to create a private network.
+
+---
+
 ## How It Works
 
 ```
-┌──────────────┐                      ┌──────────────────┐
-│              │    SSH Encrypted      │                  │
-│   iPhone /   │ ◄══════════════════► │  Your Server     │
-│   Mac App    │    or TLS (HTTPS)     │  (TermBuddy      │
-│              │                      │   Server - Go)   │
-└──────────────┘                      └──────────────────┘
-        │                                      │
++----------------+                      +------------------+
+|                |    SSH Encrypted      |                  |
+|   iPhone /     | <==================> |  Your Server     |
+|   Mac App      |    or TLS (HTTPS)    |  (TermBuddy      |
+|                |                      |   Server - Go)   |
++----------------+                      +------------------+
+        |                                      |
    No third-party                    Binds to localhost
    servers involved                  (SSH Tunnel mode)
 ```
 
-1. **Add a Server** — Enter your SSH credentials
-2. **Auto-Install** — TermBuddy installs its lightweight Go server automatically
-3. **Create Buddies** — Each Buddy is a persistent terminal session
-4. **Chat Away** — Send commands, get results, ask AI for help
+1. **Add a Server** - Enter your SSH credentials
+2. **Auto-Install** - TermBuddy installs its lightweight Go server automatically
+3. **Create Buddies** - Each Buddy is a persistent terminal session
+4. **Chat Away** - Send commands, get results, ask AI for help
 
 ---
 
-## Download
+## Security Model
 
-<p align="center">
-  <a href="#">
-    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="50">
-  </a>
-  &nbsp;&nbsp;
-  <a href="#">
-    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-mac-app-store.svg" alt="Download on the Mac App Store" height="50">
-  </a>
-</p>
+TermBuddy is designed with a "no trust required" security philosophy:
+
+| Aspect | How TermBuddy handles it |
+|--------|--------------------------|
+| **Credentials** | Stored in system Keychain only. Never sent to any third-party server. |
+| **Network traffic** | Travels through your SSH connection (port 22) or TLS with certificate pinning. End-to-end encrypted. |
+| **Server exposure** | Server component binds to 127.0.0.1 only. Never exposed to the public internet. |
+| **AI API keys** | Stored on your own server, in your server's environment. TermBuddy app never sees them. |
+| **Data relay** | No TermBuddy cloud. Your device connects directly to your server. Zero intermediaries. |
+| **Server binary** | Runs under your own user account with your own permissions. No root required. |
 
 ---
 
-## Feedback & Support
+## Troubleshooting
 
-We'd love to hear from you! If you've found a bug, have a feature request, or just want to say hello:
+<details>
+<summary><b>Cannot connect to server</b></summary>
+<br>
 
-- **Report a Bug** — [Open an Issue](https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues/new?labels=bug&template=bug_report.md)
-- **Request a Feature** — [Open an Issue](https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues/new?labels=enhancement&template=feature_request.md)
-- **General Discussion** — [Discussions](https://github.com/ATLAI-TECH/TermBuddy-FeedBack/discussions)
+- Verify the server IP address or hostname is correct
+- Confirm SSH is enabled on the server (`sudo systemctl status sshd`)
+- Check that port 22 is not blocked by a firewall
+- If using a hostname with underscores, try using the IP address instead
+</details>
+
+<details>
+<summary><b>Server shows "Offline" after setup</b></summary>
+<br>
+
+- Tap the server > Check Server Status to see the specific error
+- Check if the process is running: `ps aux | grep termbuddy`
+- Check the port is not in use: `lsof -i :8765`
+- Try Update Server from the Servers tab
+</details>
+
+<details>
+<summary><b>Claude Code AI Buddy not working</b></summary>
+<br>
+
+- Verify Claude Code is installed on the server: `which claude && claude --version`
+- If not installed: `npm install -g @anthropic-ai/claude-code` (requires Node.js 18+)
+- Confirm your Anthropic API key is entered correctly in Server Settings > AI Tools
+</details>
 
 ---
 
 ## FAQ
 
 <details>
-<summary><b>Does TermBuddy store my SSH credentials?</b></summary>
+<summary><b>Does TermBuddy store my SSH credentials on any server?</b></summary>
 <br>
 All credentials are stored securely in the system Keychain on your device. They are never transmitted to any third-party server.
 </details>
@@ -136,7 +197,7 @@ No. In SSH Tunnel mode, TermBuddy uses your existing SSH connection (port 22). N
 <details>
 <summary><b>Which AI providers are supported?</b></summary>
 <br>
-Claude Code, Codex, and Gemini CLI. You bring your own API keys — TermBuddy never sees them.
+Claude Code, Codex, and Gemini CLI. You bring your own API keys. TermBuddy never sees them.
 </details>
 
 <details>
@@ -145,10 +206,50 @@ Claude Code, Codex, and Gemini CLI. You bring your own API keys — TermBuddy ne
 Currently available on iPhone and Mac. iPad support is on the roadmap.
 </details>
 
+<details>
+<summary><b>What happens to my data if I cancel my subscription?</b></summary>
+<br>
+Your data stays on your device and your server. TermBuddy does not store any of your data on its own servers.
+</details>
+
+---
+
+## Download
+
+<p align="center">
+  <a href="#">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="50">
+  </a>
+  &nbsp;&nbsp;
+  <a href="#">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-mac-app-store.svg" alt="Download on the Mac App Store" height="50">
+  </a>
+</p>
+
+---
+
+## Support
+
+We actively monitor this repository for bug reports and feature requests.
+
+| Channel | Use for |
+|---------|---------|
+| [Bug Reports](https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues/new?labels=bug&template=bug_report.md) | Crashes, errors, incorrect behavior |
+| [Feature Requests](https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues/new?labels=enhancement&template=feature_request.md) | Ideas, suggestions, improvements |
+| [All Issues](https://github.com/ATLAI-TECH/TermBuddy-FeedBack/issues) | Browse existing reports |
+| Email | [atlai@atlai.co.uk](mailto:atlai@atlai.co.uk) |
+
+When reporting a bug, please include:
+- TermBuddy app version (Settings > About)
+- Device model and OS version
+- Server OS and architecture (e.g., Ubuntu 22.04, x86_64)
+- Steps to reproduce the issue
+- Any relevant log output (Settings > Help > View Logs)
+
 ---
 
 <p align="center">
-  <img src="images/thumb_up.png" alt="TermBuddy Thumbs Up" width="120">
+  <img src="images/logo_dark_bgbwhite.png" alt="TermBuddy" width="120">
   <br><br>
   <b>Stop wrestling with terminals. Start chatting with them.</b>
   <br>
